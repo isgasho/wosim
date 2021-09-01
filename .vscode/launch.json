@@ -1,0 +1,49 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug client",
+            "cargo": {
+                "args": ["build", "--bin=wosim", "--package=client"],
+                "filter": {
+                    "name": "wosim",
+                    "kind": "bin"
+                }
+            },
+            "args": "${input:clientArgs}",
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug headless",
+            "cargo": {
+                "args": ["build", "--bin=wosim-headless", "--package=headless"],
+                "filter": {
+                    "name": "wosim-headless",
+                    "kind": "bin"
+                }
+            },
+            "args": "${input:headlessArgs}",
+            "cwd": "${workspaceFolder}"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "clientArgs",
+            "type": "promptString",
+            "default": "play",
+            "description": "Program args",
+            "password": false
+        },
+        {
+            "id": "headlessArgs",
+            "type": "promptString",
+            "default": "serve",
+            "description": "Program args",
+            "password": false
+        }
+    ]
+}

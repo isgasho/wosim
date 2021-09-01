@@ -1,0 +1,62 @@
+{
+    "target": {
+        "broadcom": {
+            "context": "./",
+            "dockerfile": "./Dockerfile",
+            "args": {
+                "VULKAN_DRIVER": "vulkan-broadcom"
+            },
+            "tags": ["ghcr.io/${USERNAME}/wosim-broadcom:${TAG}"],
+            "platforms": ["linux/arm64"]
+        },
+        "intel": {
+            "context": "./",
+            "dockerfile": "./Dockerfile",
+            "args": {
+                "VULKAN_DRIVER": "vulkan-intel"
+            },
+            "tags": ["ghcr.io/${USERNAME}/wosim-intel:${TAG}"],
+            "platforms": ["linux/amd64"]
+        },
+        "nvidia": {
+            "context": "./",
+            "dockerfile": "./Dockerfile",
+            "args": {
+                "VULKAN_DRIVER": "nvidia-utils"
+            },
+            "tags": ["ghcr.io/${USERNAME}/wosim-nvidia:${TAG}"],
+            "platforms": ["linux/amd64"]
+        },
+        "radeon": {
+            "context": "./",
+            "dockerfile": "./Dockerfile",
+            "args": {
+                "VULKAN_DRIVER": "vulkan-radeon"
+            },
+            "tags": ["ghcr.io/${USERNAME}/wosim-radeon:${TAG}"],
+            "platforms": ["linux/amd64", "linux/arm64"]
+        },
+        "swrast": {
+            "context": "./",
+            "dockerfile": "./Dockerfile",
+            "args": {
+                "VULKAN_DRIVER": "vulkan-swrast"
+            },
+            "tags": ["ghcr.io/${USERNAME}/wosim-swrast:${TAG}"],
+            "platforms": ["linux/amd64", "linux/arm64"]
+        }
+    },
+    "group": {
+        "default": {
+            "targets": ["broadcom", "intel", "nvidia", "radeon", "swrast"]
+        }
+    },
+    "variable": {
+        "TAG": {
+            "default": "latest"
+        },
+        "USERNAME": {
+            "default": "wosim-net"
+        }
+    }
+}

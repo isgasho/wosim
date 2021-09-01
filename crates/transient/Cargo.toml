@@ -1,0 +1,14 @@
+[package]
+name = "transient"
+version = "0.0.0"
+authors = ["Edgar Geier <egeier@rhrk.uni-kl.de>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+derive = { path = "../derive" }
+nalgebra = "0.29.0"
+physics = { path = "../physics" }
+protocol = { path = "../protocol" }
+util = { path = "../util" }

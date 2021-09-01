@@ -1,0 +1,15 @@
+[package]
+name = "persistent"
+version = "0.0.0"
+authors = ["Edgar Geier <egeier@rhrk.uni-kl.de>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+bincode = "1.3.3"
+bitflags = "1.2.1"
+database = { path="../database" }
+derive = { path="../derive" }
+protocol = { path="../protocol" }
+serde = { version="1.0.125", features=["derive"] }

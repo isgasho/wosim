@@ -1,0 +1,15 @@
+[package]
+name = "protocol"
+version = "0.0.0"
+authors = ["Edgar Geier <egeier@rhrk.uni-kl.de>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+bytemuck = { version = "1.5.1", features = ["derive"] }
+nalgebra = "0.29"
+glam = { version = "0.17", features = ["bytemuck", "serde"] }
+network = { path = "../network" }
+serde = { version = "1.0.125", features = ["derive", "rc"] }
+util = { path = "../util" }

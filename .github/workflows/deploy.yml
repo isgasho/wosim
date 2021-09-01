@@ -1,0 +1,97 @@
+name: Deploy
+
+on:
+    push:
+        tags:
+            - v*
+
+env:
+    CARGO_TERM_COLOR: always
+
+jobs:
+    client:
+        strategy:
+            matrix:
+                os: [ubuntu-latest, windows-latest, macos-latest]
+                include:
+                    - os: ubuntu-latest
+                      os-name: linux
+                    - os: windows-latest
+                      os-name: windows
+                    - os: macos-latest
+                      os-name: macos
+
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - uses: actions/checkout@v2
+
+            - name: Install Vulkan SDK and dependencies (Ubuntu)
+              if: matrix.os == 'ubuntu-latest'
+              run: |
+                  wget -qO - http://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
+                  sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-focal.list http://packages.lunarg.com/vulkan/lunarg-vulkan-focal.list
+                  sudo apt update
+                  sudo apt install vulkan-sdk libxcb-shape0-dev libxcb-xfixes0-dev libxkbcommon-dev
+
+            - name: Install Vulkan SDK (Windows)
+              if: matrix.os == 'windows-latest'
+              run: |
+                  choco install vulkan-sdk --version=1.2.162.1
+                  echo "VULKAN_SDK=C:\VulkanSDK\1.2.162.1" >> $GITHUB_ENV
+              shell: bash
+
+            - name: Install MoltenVK (macOS)
+              if: matrix.os == 'macos-latest'
+              run: brew install molten-vk
+
+            - name: Rust toolchain
+              run: rustup show
+
+            - name: Rust cache
+              uses: Swatinem/rust-cache@v1
+
+            - name: Build
+              run: cargo build --release
+
+            - name: Compress
+              run: zstd target/release/wosim${{ matrix.os == 'windows-latest' && '.exe' || '' }} -o ${{ matrix.os-name }}.zst
+
+            - name: Upload
+              uses: actions/upload-artifact@v2
+              with:
+                  name: client
+                  path: ${{ matrix.os-name }}.zst
+
+    headless:
+        strategy:
+            matrix:
+                target: [broadcom, intel, nvidia, radeon, swrast]
+
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v2
+            - name: Set up QEMU
+              uses: docker/setup-qemu-action@v1
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v1
+            - name: Login to GitHub Container Registry
+              uses: docker/login-action@v1
+              with:
+                  registry: ghcr.io
+                  username: ${{ github.repository_owner }}
+                  password: ${{ secrets.GITHUB_TOKEN }}
+            - name: Extract tag
+              id: get-tag
+              run: echo ::set-output name=tag::$(echo ${{ github.ref }} | cut -c 12-)
+            - name: Build and push
+              uses: docker/bake-action@v1.4.2
+              with:
+                  files: docker-bake.json
+                  targets: ${{ matrix.target }}
+                  push: true
+              env:
+                  TAG: ${{ steps.get-tag.outputs.tag }}
+                  USERNAME: ${{ github.repository_owner }}

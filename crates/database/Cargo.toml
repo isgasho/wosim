@@ -1,0 +1,19 @@
+[package]
+name = "database"
+version = "0.0.0"
+authors = ["Edgar Geier <egeier@rhrk.uni-kl.de>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+arrayvec = "0.7.0"
+atomic_refcell = "0.1.7"
+bytemuck = { version = "1.5.1", features = ["derive"] }
+memmap2 = "0.3.0"
+page_size = "0.4.2"
+sha3 = "0.9.1"
+static_assertions = "1.1.0"
+tempfile = "3.2"
+tinyvec = "1.1"
+tracing = "0.1.26"

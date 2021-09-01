@@ -1,0 +1,21 @@
+[package]
+name = "headless"
+version = "0.0.0"
+authors = ["Edgar Geier <egeier@rhrk.uni-kl.de>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+ctrlc = "3.1.9"
+generator = { path = "../generator" }
+jsonwebtoken = "7.2.0"
+network = { path = "../network" }
+quinn = "0.7.2"
+semver = "1"
+server = { path = "../server" }
+structopt = "0.3.21"
+tokio = { version = "1.6.0", features = ["rt", "rt-multi-thread", "time"] }
+tracing-subscriber = "0.2.19"
+util = { path = "../util" }
+vulkan = { path = "../vulkan" }

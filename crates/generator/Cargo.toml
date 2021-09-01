@@ -1,0 +1,19 @@
+[package]
+name = "generator"
+version = "0.0.0"
+authors = ["Edgar Geier <egeier@rhrk.uni-kl.de>"]
+license = "MIT OR Apache-2.0"
+edition = "2018"
+publish = false
+
+[dependencies]
+generator-spirv = { path = "../generator-spirv" }
+database = { path = "../database" }
+noise = "0.7.0"
+glam = "0.17"
+persistent = { path = "../persistent" }
+protocol = { path = "../protocol" }
+thiserror = "1.0.25"
+tokio = "1.6.0"
+util = { path = "../util" }
+vulkan = { path = "../vulkan" }

@@ -1,0 +1,74 @@
+version: "3.8"
+services:
+    broadcom:
+        image: ghcr.io/${USERNAME}/wosim-broadcom
+        container_name: wosim-broadcom
+        volumes:
+            - "./world:/world"
+            - "./ssl:/etc/wosim/ssl"
+        ports:
+            - "2021:2021/udp"
+        devices:
+            - /dev/dri:/dev/dri
+        profiles: ["broadcom"]
+    intel:
+        image: ghcr.io/${USERNAME}/wosim-intel
+        container_name: wosim-intel
+        volumes:
+            - "./world:/world"
+            - "./ssl:/etc/wosim/ssl"
+        ports:
+            - "2021:2021/udp"
+        devices:
+            - /dev/dri:/dev/dri
+        profiles: ["intel"]
+
+    nvidia:
+        image: ghcr.io/${USERNAME}/wosim-nvidia
+        container_name: wosim-nvidia
+        runtime: nvidia
+        deploy:
+            resources:
+                reservations:
+                    devices:
+                        - driver: nvidia
+                          count: all
+                          capabilities:
+                              - graphics
+                              - display
+                              - video
+                              - utility
+                              - compute
+                              - compat32
+        volumes:
+            - "./world:/world"
+            - "./ssl:/etc/wosim/ssl"
+        ports:
+            - "2021:2021/udp"
+        devices:
+            - /dev/nvidia0:/dev/nvidia0
+            - /dev/nvidiactl:/dev/nvidiactl
+            - /dev/nvidia-modeset:/dev/nvidia-modeset
+            - /dev/nvidia-uvm:/dev/nvidia-uvm
+            - /dev/nvidia-uvm-tools:/dev/nvidia-uvm-tools
+        profiles: ["nvidia"]
+    radeon:
+        image: ghcr.io/${USERNAME}/wosim-radeon
+        container_name: wosim-radeon
+        volumes:
+            - "./world:/world"
+            - "./ssl:/etc/wosim/ssl"
+        ports:
+            - "2021:2021/udp"
+        devices:
+            - /dev/dri:/dev/dri
+        profiles: ["radeon"]
+    swrast:
+        image: ghcr.io/${USERNAME}/wosim-swrast
+        container_name: wosim-swrast
+        volumes:
+            - "./world:/world"
+            - "./ssl:/etc/wosim/ssl"
+        ports:
+            - "2021:2021/udp"
+        profiles: ["swrast"]
